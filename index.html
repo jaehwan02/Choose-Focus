@@ -242,7 +242,9 @@
 				const requiredTestScore = (goal - weightedEvaluationSum) / testRatio;
 
 				if (requiredTestScore.toFixed(0) > 100) {
-					document.getElementById('result').textContent = `100점을 초과합니다. 목표 점수 달성이 불가능합니다.`;
+					document.getElementById('result').textContent = `목표 점수를 달성하려면 시험에서 ${requiredTestScore.toFixed(
+						1,
+					)}점 이상 받아야합니다. 목표 점수 달성이 불가능합니다.`;
 				} else if (requiredTestScore < 0) {
 					document.getElementById('result').textContent = `이미 목표를 달성했습니다!`;
 				} else {
