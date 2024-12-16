@@ -10,13 +10,15 @@
 				font-family: 'Arial', sans-serif;
 				background-color: #f9f9f9;
 				margin: 0;
+				margin-top: 20vh;
+				margin-bottom: 20vh;
 				padding: 0;
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				height: 100vh;
 				width: 100vw;
 				box-sizing: border-box;
+				overflow: scroll;
 			}
 
 			form {
@@ -62,10 +64,11 @@
 				border-radius: 4px;
 				padding: 10px;
 				cursor: pointer;
-				font-size: 1rem;
+				font-size: 0.9rem;
 				margin: 5px 0;
 				width: 100%;
 				box-sizing: border-box;
+				font-weight: 400;
 			}
 
 			button:hover {
@@ -87,63 +90,73 @@
 				margin-bottom: 10px;
 				background: #fafafa;
 			}
-
-			/* 반응형 스타일 */
+			div.main {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				flex-direction: column;
+				width: 50%;
+			}
 			@media (max-width: 768px) {
-				body {
-					padding: 20px;
+				.main {
+					width: 90%;
+				}
+				form {
+					max-width: 90%;
+					padding: 15px;
 				}
 
 				h1 {
 					font-size: 1.2rem;
 				}
 
+				button {
+					font-size: 0.85rem;
+					padding: 8px;
+				}
+
 				label {
-					font-size: 0.8rem;
+					font-size: 0.85rem;
 				}
 
 				input[type='number'] {
 					font-size: 0.9rem;
 					padding: 8px;
 				}
-
-				button {
-					font-size: 0.9rem;
-					padding: 8px;
-				}
-
-				#result {
-					font-size: 0.9rem;
-				}
 			}
 
-			@media (max-width: 480px) {
+			@media (max-width: 550px) {
+				div.main {
+					width: 90%;
+				}
+
+				form {
+					max-width: 100%;
+					padding: 10px;
+				}
+
 				h1 {
 					font-size: 1rem;
 				}
 
-				label {
-					font-size: 0.8rem;
-				}
-
-				input[type='number'] {
-					font-size: 0.8rem;
-					padding: 6px;
-				}
-
 				button {
 					font-size: 0.8rem;
 					padding: 6px;
 				}
 
-				#result {
+				label {
 					font-size: 0.8rem;
+				}
+
+				input[type='number'] {
+					font-size: 0.85rem;
+					padding: 6px;
 				}
 			}
 		</style>
 	</head>
 	<body>
-		<div style="display: flex; justify-content: center; align-items: center; flex-direction: column; width: 50%">
+		<div class="main">
 			<h1>받아야하는 시험 점수 계산기</h1>
 			<form id="scoreForm">
 				<label for="goal">목표 점수:</label>
@@ -229,9 +242,7 @@
 				const requiredTestScore = (goal - weightedEvaluationSum) / testRatio;
 
 				if (requiredTestScore > 100) {
-					document.getElementById('result').textContent = `목표 점수를 달성하려면 시험에서 ${requiredTestScore.toFixed(
-						2,
-					)}점을 받아야 합니다. 100점을 초과하므로 목표가 너무 높습니다.`;
+					document.getElementById('result').textContent = `100점을 초과합니다. 목표 점수 달성이 불가능합니다.`;
 				} else if (requiredTestScore < 0) {
 					document.getElementById('result').textContent = `이미 목표를 달성했습니다!`;
 				} else {
