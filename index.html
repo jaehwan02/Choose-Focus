@@ -241,7 +241,7 @@
 				const testRatio = 1 - totalEvaluationRatio;
 				const requiredTestScore = (goal - weightedEvaluationSum) / testRatio;
 
-				if (requiredTestScore > 100) {
+				if (requiredTestScore.toFixed(0) > 100) {
 					document.getElementById('result').textContent = `100점을 초과합니다. 목표 점수 달성이 불가능합니다.`;
 				} else if (requiredTestScore < 0) {
 					document.getElementById('result').textContent = `이미 목표를 달성했습니다!`;
