@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>선택과 집중 계산기</title>
+	</head>
+	<body>
+		<h1>받아야하는 시험 점수 계산기</h1>
+		<form id="scoreForm">
+			<label for="goal">목표 점수:</label>
+			<input type="number" id="goal" name="goal" required /><br /><br />
+
+			<div id="evaluationScores">
+				<div>
+					<label for="evaluationScore1">수행평가 점수 1:</label>
+					<input type="number" id="evaluationScore1" name="evaluationScore" required />
+					<label for="evaluationRatio1">반영 비율 (%):</label>
+					<input type="number" id="evaluationRatio1" name="evaluationRatio" min="0" max="100" required />
+				</div>
+			</div>
+
+			<button type="button" onclick="addEvaluationField()">수행평가 추가</button><br /><br />
+			<button type="button" onclick="calculateRequiredScore()">계산하기</button>
+		</form>
+
+		<h2 id="result"></h2>
+
+		<script>
+			function addEvaluationField() {
+				const evaluationScoresDiv = document.getElementById('evaluationScores');
+				const newFieldIndex = evaluationScoresDiv.children.length + 1;
+
+				const newDiv = document.createElement('div');
+
+				const newLabelScore = document.createElement('label');
+				newLabelScore.setAttribute('for', `evaluationScore${newFieldIndex}`);
+				newLabelScore.textContent = `수행평가 점수 ${newFieldIndex}:`;
+
+				const newInputScore = document.createElement('input');
+				newInputScore.type = 'number';
+				newInputScore.id = `evaluationScore${newFieldIndex}`;
+				newInputScore.name = 'evaluationScore';
+				newInputScore.required = true;
+
+				const newLabelRatio = document.createElement('label');
+				newLabelRatio.setAttribute('for', `evaluationRatio${newFieldIndex}`);
+				newLabelRatio.textContent = `반영 비율 (%):`;
+
+				const newInputRatio = document.createElement('input');
+				newInputRatio.type = 'number';
+				newInputRatio.id = `evaluationRatio${newFieldIndex}`;
+				newInputRatio.name = 'evaluationRatio';
+				newInputRatio.min = '0';
+				newInputRatio.max = '100';
+				newInputRatio.required = true;
+
+				newDiv.appendChild(newLabelScore);
+				newDiv.appendChild(newInputScore);
+				newDiv.appendChild(newLabelRatio);
+				newDiv.appendChild(newInputRatio);
+
+				evaluationScoresDiv.appendChild(newDiv);
+			}
+
+			function calculateRequiredScore() {
+				const goal = parseFloat(document.getElementById('goal').value);
+
+				const evaluationDivs = document.querySelectorAll('#evaluationScores div');
+				let weightedEvaluationSum = 0;
+				let totalEvaluationRatio = 0;
+
+				evaluationDivs.forEach((div) => {
+					const score = parseFloat(div.querySelector('input[name="evaluationScore"]').value) || 0;
+					const ratio = parseFloat(div.querySelector('input[name="evaluationRatio"]').value) / 100 || 0;
+
+					weightedEvaluationSum += score * ratio;
+					totalEvaluationRatio += ratio;
+				});
+
+				if (totalEvaluationRatio > 1) {
+					document.getElementById('result').textContent = '수행평가 반영 비율의 총합은 100%를 초과할 수 없습니다.';
+					return;
+				}
+
+				if (totalEvaluationRatio === 0) {
+					document.getElementById('result').textContent = '수행평가 반영 비율이 0%입니다. 비율을 입력해주세요.';
+					return;
+				}
+
+				const testRatio = 1 - totalEvaluationRatio;
+				const requiredTestScore = (goal - weightedEvaluationSum) / testRatio;
+
+				if (requiredTestScore > 100) {
+					document.getElementById('result').textContent = `목표 점수를 달성하려면 시험에서 ${requiredTestScore.toFixed(
+						2,
+					)}점을 받아야 합니다. 100점을 초과하므로 목표가 너무 높습니다.`;
+				} else if (requiredTestScore < 0) {
+					document.getElementById('result').textContent = `이미 목표를 달성했습니다!`;
+				} else {
+					document.getElementById('result').textContent = `목표 점수를 달성하려면 시험에서 ${requiredTestScore.toFixed(
+						2,
+					)}점 이상 받아야 합니다.`;
+				}
+			}
+		</script>
+	</body>
+</html>
